@@ -27,6 +27,7 @@
 						<th>Nome</th>
 						<th>Quantidade</th>
 						<th>Valor</th>
+						<th>Propiedades</th>
 						<th style="width: 21%;">Ações</th>
 					</tr>
 				</thead>
@@ -36,6 +37,7 @@
 						<td>{{ itemmeal.name }}</td>
 						<td>{{ itemmeal.amount }}</td>
 						<td>{{ itemmeal.value }}</td>
+						<td>{{ itemmeal.properties }}</td>
 						<td>                    
 							<a href="{% url 'meal:item_meal_details' itemmeal.id %}" class="btn btn-default" title="Exibir">
 								<i class="fa fa-search" aria-hidden="true"></i>

@@ -16,9 +16,10 @@ class AuditModel(models.Model):
 
 class ItemMeal(AuditModel):
 
-	name = models.CharField('Nome', max_length=100)
-	amount = models.IntegerField('Quantidade')
-	value = models.DecimalField('Valor', max_digits=9, decimal_places=2)
+	name = models.CharField('Nome', max_length=100,default='')
+	amount = models.IntegerField('Quantidade',default='')
+	value = models.DecimalField('Valor', max_digits=9, decimal_places=2,default='')
+	properties = models.CharField('Propiedades', max_length=100,default='')
 	
 
 	def __str__(self):
