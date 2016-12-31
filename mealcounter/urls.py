@@ -15,17 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.conf import settings
-from django.conf.urls.static import static
 # Import URLS
-from mealcounter.core import urls as core_urls
-from mealcounter.accounts import urls as accounts_urls 
-from mealcounter.meal import urls as meal_urls 
+from core import urls as core_urls
+from accounts import urls as accounts_urls
+from meal import urls as meal_urls
 
 
 urlpatterns = [
     url(r'^', include(core_urls, namespace='core')),
     url(r'^accounts/', include(accounts_urls, namespace='accounts')),
-	url(r'^', include(meal_urls, namespace='meal')),
+    url(r'^', include(meal_urls, namespace='meal')),
     url(r'^admin/', admin.site.urls),
 ]

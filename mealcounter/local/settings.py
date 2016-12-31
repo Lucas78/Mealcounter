@@ -1,1 +1,0 @@
-/home/lucas-marques/mealcounter/mealcounter/settings.py
