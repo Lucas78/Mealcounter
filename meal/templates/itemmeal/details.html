@@ -2,52 +2,93 @@
 
 {% block body %}
 
-<nav class="navbar navbar-default">
-  <div class="container">
-    <a class="navbar-brand" href="#">Dados do Item da Refeição</a>
-    <ul class="nav navbar-nav pull-right">
-      <li>
-        <p class="navbar-btn">
-          <a class="btn btn-default nav-dist-btn" href="{% url 'meal:item_meal_list' %}"> 
-            <i class="fa fa-chevron-left" aria-hidden="true"></i>
-            Voltar
-          </a>
-        </p>
-      </li>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <a class="navbar-brand" href="#">Dados do Item da Refeição</a>
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <p class="navbar-btn">
+                        <a class="btn btn-default nav-dist-btn" href="{% url 'meal:item_meal_list' %}">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            Voltar
+                        </a>
+                    </p>
+                </li>
 
-      <li>
-        <p class="navbar-btn">
-          <a class="btn btn-default" href="{% url 'meal:item_meal_edit' object.id %}"> 
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            Editar
-          </a>
-        </p>
-      </li>
-    </ul>
-  </div>
-</nav>
+                <li>
+                    <p class="navbar-btn">
+                        <a class="btn btn-default" href="{% url 'meal:item_meal_edit' object.id %}">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            Editar
+                        </a>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <p>
-          <strong>Nome:</strong>
-          {{ object.name }}
-        </p>
-        <p>
-          <strong>Quantidade:</strong>
-          {{ object.amount }}
-        </p>
-        <p>
-          <strong>Valor:</strong>
-          {{ object.value }}
-        </p>
-        <p>
-          <strong>Propiedades:</strong>
-          {{ object.properties }}
-        </p>
-      </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <p>
+                    <strong>Nome:</strong>
+                    {{ object.name }}
+                </p>
+                <p>
+                    <strong>Propriedades:</strong>
+                    {{ object.properties }}
+                </p>
+            </div>
+        </div>
+        <hr/>
+        <div class="col-md-6">
+            <h5>Alergia(s)</h5>
+            <hr/>
+            {% if not object.allergy.exists %}
+                Não é alérgico
+            {% else %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for allergy in object.allergy.all %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'meal:allergy_details' allergy.pk %}">{{ allergy.name }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h5>Prato(s)</h5>
+            <hr/>
+            {% if not object.item_plate.exists %}
+                Não está em nenhum prato
+            {% else %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plate in object.item_plate.all %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'meal:plate_details' plate.pk %}">{{ plate.name }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
     </div>
-  </div>
 
-  {% endblock %}
+{% endblock %}

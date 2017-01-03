@@ -8,7 +8,7 @@
             <ul class="nav navbar-nav pull-right">
                 <li>
                     <p class="navbar-btn">
-                        <a class="btn btn-default" href="{% url "meal:plate_add" %}">
+                        <a class="btn btn-default" href="{% url 'meal:plate_add' %}">
                             <i class="fa fa-file-o" aria-hidden="true"></i>
                             Novo
                         </a>
@@ -21,6 +21,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
+                {% if not object_list %}
+                Não há pratos registrados
+                {% else %}
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -33,11 +36,11 @@
                             <tr>
                                 <td>{{ plate.name }}</td>
                                 <td>
-                                    <a href="{% url "meal:plate_details" plate.id %}" class="btn btn-default" title="Exibir">
+                                    <a href="{% url 'meal:plate_details' plate.id %}" class="btn btn-default" title="Exibir">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </a>
 
-                                    <a href="{% url "meal:plate_edit" plate.id %}" class="btn btn-default" title="Editar">
+                                    <a href="{% url 'meal:plate_edit' plate.id %}" class="btn btn-default" title="Editar">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     </a>
 
@@ -61,7 +64,7 @@
                                                     <strong>{{ plate.name }}</strong>?</p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{% url "meal:plate_delete" plate.pk %}" method="post">{%csrf_token%}
+                                                <form action="{% url 'meal:plate_delete' plate.pk %}" method="post">{%csrf_token%}
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                                                     <button type="submit" class="btn btn-danger" title="Deletar">
                                                         Excluir
@@ -76,6 +79,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
             </div>
         </div>
         <center>
@@ -97,9 +101,15 @@
                             </li>
                         {% endif %}
                         {% for page_num in page_obj.paginator.page_range %}
-                            <li {% if page_num == patients.number %} class="active" {% endif %}>
+                            {% if page_num == patients.number %}
+                            <li class="active">
                                 <a href="?page={{ page_num }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}">{{ page_num }}</a>
                             </li>
+                            {% else %}
+                            <li>
+                                <a href="?page={{ page_num }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}">{{ page_num }}</a>
+                            </li>
+                            {% endif %}
                         {% endfor %}
                         {% if page_obj.has_next %}
                             <li>

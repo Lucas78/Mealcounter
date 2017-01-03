@@ -24,22 +24,27 @@
                     <fieldset>
                         {% for field in form %}
                             {% if field.errors %}
-                                    {% if field|field_type == 'booleanfield' %}
+                                {% if field|field_type == 'booleanfield' %}
                                     <div class="checkbox error">
                                         <label>
                                             {{ field }}
                                             {{ field.label }}
                                         </label>
                                     </div>
-                                    {% else %}
-                                    <div class="form-group error">
-                                        <label class="control-label">{{ field.label }}</label>
+                                {% else %}
+                                    <div class="form-group has-error">
+                                        <label class="control-label">
+                                            {{ field.label }}
+                                            {% if field.field.required %}
+                                                <span class="text-danger">( * )</span>
+                                            {% endif %}
+                                        </label>
                                         {{ field|add_class:"form-control input-md" }}
                                     </div>
-                                    {% endif %}
-                                    {% for error in field.errors%}
-                                        <span class="help-inline error">{{ error}}</span>
-                                        {% endfor%}
+                                {% endif %}
+                                {% for error in field.errors%}
+                                    <span class="help-block">{{ error}}</span>
+                                    {% endfor%}
 
                                 {% else %}
                                     {% if field|field_type == 'booleanfield' %}
@@ -51,7 +56,12 @@
                                         </div>
                                     {% else %}
                                         <div class="form-group">
-                                            <label class="control-label">{{ field.label }}</label>
+                                            <label class="control-label">
+                                                {{ field.label }}
+                                                {% if field.field.required %}
+                                                    <span class="text-danger">( * )</span>
+                                                {% endif %}
+                                            </label>
                                             {{ field|add_class:"form-control input-md" }}
                                         </div>
                                     {% endif %}

@@ -27,7 +27,7 @@ body { padding-top: 50px; }
 }
 
 .space-tabs{
-  margin-bottom: 3rem; 
+  margin-bottom: 3rem;
   margin-top: 3rem;
 }
 
@@ -42,7 +42,7 @@ body { padding-top: 50px; }
 /*.vertical-text {
   max-width: 5px;
   white-space: nowrap;
-  -webkit-transform: rotate(-90deg); 
+  -webkit-transform: rotate(-90deg);
   -moz-transform: rotate(-90deg);
 
   background:transparent !important;
@@ -98,10 +98,10 @@ body { padding-top: 50px; }
   display: none;
 }
 
-@page  
-{ 
-  size: auto; 
-  margin: 1mm 5mm 5mm 5mm;  
+@page
+{
+  size: auto;
+  margin: 1mm 5mm 5mm 5mm;
 }
 
 @media print {
@@ -147,8 +147,8 @@ body { padding-top: 50px; }
 .center-total tr td:nth-child(2) { text-align: center; }
 
 .tit-table{
-  border: dashed 1px #000; 
-  padding: 5px 5px 4px 4px; 
+  border: dashed 1px #000;
+  padding: 5px 5px 4px 4px;
   text-align: center;
   margin: 0;
   font-size: 1.0rem;
@@ -157,7 +157,7 @@ body { padding-top: 50px; }
 }
 
 .tit-table-tr{
-  padding: 5px 5px 4px 4px; 
+  padding: 5px 5px 4px 4px;
   text-align: center;
   margin: 0;
   font-size: 1.0rem;
@@ -166,7 +166,7 @@ body { padding-top: 50px; }
 }
 
 .tit-tr-normal, .tit-tr-normal th{
-  padding: 5px 5px 4px 4px; 
+  padding: 5px 5px 4px 4px;
   text-align: center;
   margin: 0;
   font-size: 1.0rem;

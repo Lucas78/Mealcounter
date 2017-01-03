@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
+
 {% load widget_tweaks %}
+
 {% block body %}
     <nav class="navbar navbar-default">
         <div class="container">
-            <a class="navbar-brand" href="#">Cadastro/Alteração dos Itens da Refeição</a>
+            <a class="navbar-brand" href="#">Cadastro/Alteração das Alergias</a>
             <ul class="nav navbar-nav pull-right">
                 <li>
                     <p class="navbar-btn">
-                        <a class="btn btn-default" href="{% url 'meal:item_meal_list' %}">
+                        <a class="btn btn-default" href="{% url 'meal:allergy_list' %}">
                             <i class="fa fa-times" aria-hidden="true"></i>
                             Cancelar
                         </a>

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <a class="navbar-brand" href="#">Dados do Aluno</a>
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <p class="navbar-btn">
+                        <a class="btn btn-default nav-dist-btn" href="{% url  'student:student_list' %}">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            Voltar
+                        </a>
+                    </p>
+                </li>
+
+                <li>
+                    <p class="navbar-btn">
+                        <a class="btn btn-default" href="{% url 'student:student_edit' object.id %}">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            Editar
+                        </a>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <p>
+                    <strong>Matrícula:</strong>
+                    {{ object.registration }}
+                </p>
+                <p>
+                    <strong>Nome Completo:</strong>
+                    {{ object.get_full_name }}
+                </p>
+                <p>
+                    <strong>CPF</strong>
+                    {{ object.cpf }}
+                </p>
+                <p>
+                    <strong>RG:</strong>
+                    {{ object.rg }}
+                </p>
+                <p>
+                    <strong>Apelido:</strong>
+                    {{ object.nickname }}
+                </p>
+                <p>
+                    <strong>Genêro:</strong>
+                    {{ object.gender }}
+                </p>
+                <p>
+                    <strong>Nome do Pai:</strong>
+                    {{ object.father_name }}
+                </p>
+                <p>
+                    <strong>Profissão do pai:</strong>
+                    {{ object.father_occupation }}
+                </p>
+                <p>
+                    <strong>Nome da Mãe:</strong>
+                    {{ object.mother_occupation }}
+                </p>
+                <p>
+                    <strong>Telefone:</strong>
+                    {{ object.phone }}
+                </p>
+                <p>
+                    <strong>Data de Nascimento:</strong>
+                    {{ object.birth }}
+                </p>
+                <p>
+                    <strong>CEP:</strong>
+                    {{ object.postal_code }}
+                </p>
+                <p>
+                    <strong>Cidade:</strong>
+                    {{ object.city }}
+                </p>
+                <p>
+                    <strong>Endereço:</strong>
+                    {{ object.address }}
+                </p>
+                <p>
+                    <strong>Número:</strong>
+                    {{ object.address_number }}
+                </p>
+                <p>
+                    <strong>Nome Completo:</strong>
+                    {{ object.get_full_name }}
+                </p>
+                <p>
+                    <strong>Bairro:</strong>
+                    {{ object.district }}
+                </p>
+                <p>
+                    <strong>Referência:</strong>
+                    {{ object.reference }}
+                </p>
+                <p>
+                    <strong>Foto:</strong>
+                    <img class="photo-detail img-responsive img-rounded" src="{{ object.photo.url }}" alt="Foto" />
+                </p>
+                <hr>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Alergia(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for allergy in object.allergy.all %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'meal:allergy_details' allergy.pk %}">{{ allergy.name }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

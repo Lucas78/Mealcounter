@@ -1,44 +1,67 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from meal.models import AuditModel
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from meal.models import AuditModel, Plate, Meal, Allergy
 
 
-class Student(AuditModel):
-    SEXO_C = (('F', 'Feminino'), ('M', 'Masculino'),)
-    num_matricula = models.CharField(
-        "Numero da Matricula", max_length=255, null=True)
-    cpf = models.CharField(max_length=255, null=True)
-    rg = models.CharField(max_length=255, null=True)
-    apelido = models.CharField(max_length=255, null=True)
-    sexo = models.CharField(max_length=1, choices=SEXO_C, blank=True)
-    nome_pai = models.CharField(
-        max_length=255, verbose_name="Nome do Pai", null=True)
-    prof_pai = models.CharField(
-        max_length=255, verbose_name="Profissão", null=True)
-    nome_mae = models.CharField(
-        max_length=255, verbose_name="Nome da Mãe", null=True, blank=True)
-    prof_mae = models.CharField(
-        max_length=255, verbose_name="Profissão", null=True, blank=True)
-    telefone = models.CharField(
-        max_length=20,
-        verbose_name="Telefone para contato",
-        null=True,
+class Student(User, AuditModel):
+    GENDERS = (
+        ('F', 'Feminino'),
+        ('M', 'Masculino')
+    )
+    registration = models.CharField('Matrícula', max_length=255, default='')
+    cpf = models.CharField('CPF', max_length=255, default='')
+    rg = models.CharField('RG', max_length=255, default='')
+    nickname = models.CharField(
+        'Apelido', max_length=255, null=True, blank=True)
+    gender = models.CharField(
+        'Gênero', max_length=1, choices=GENDERS, default='')
+    father_name = models.CharField('Nome do Pai', max_length=255, default='')
+    father_occupation = models.CharField(
+        'Profissão do Pai', max_length=255, default='')
+    mother_name = models.CharField('Nome da Mãe', max_length=255, default='')
+    mother_occupation = models.CharField(
+        'Profissão da Mãe', max_length=255, default='')
+    phone = models.CharField('Telefone', max_length=15, default='')
+    birth = models.DateField('Data de Nascimento')
+    postal_code = models.CharField('CEP', max_length=9, default='')
+    city = models.CharField('Cidade', max_length=255, default='')
+    address = models.CharField('Endereço', max_length=255, default='')
+    address_number = models.CharField('Número', max_length=255, default='')
+    district = models.CharField('Bairro', max_length=255, default='')
+    reference = models.CharField(
+        'Referência', max_length=255, null=True, blank=True)
+    photo = models.ImageField(
+        'Foto', upload_to='cadastro-aluno/', null=True, blank=True)
+    allergy = models.ManyToManyField(
+        Allergy,
+        verbose_name='Alergias',
+        related_name='allergy_student',
         blank=True)
-    datanascimento = models.DateField(
-        verbose_name="Data de Nascimento", blank=True)
-    endereco = models.CharField(
-        max_length=255, verbose_name="Endereço", null=True, blank=True)
-    num = models.CharField(
-        max_length=255, verbose_name="Numero", null=True, blank=True)
-    complemento = models.CharField(max_length=255, null=True)
-    cep = models.CharField(max_length=9, null=True, blank=True)
-    bairro = models.CharField(max_length=255, null=True, blank=True)
-    cidade = models.CharField(max_length=255, null=True, blank=True)
-    datacadastro = models.DateTimeField(auto_now_add=True)
-    foto = models.ImageField(upload_to='cadastro-aluno/', null=True)
-    texto = models.TextField(verbose_name="Descrição", null=True)
+
+    def __str__(self):
+        return self.get_full_name()
+
+    def get_absolute_url(self):
+        return reverse('student:student_list')
 
     class Meta:
-        ordering = ['created_on']
+        ordering = ['-created_on']
         verbose_name = 'Aluno'
         verbose_name_plural = 'Alunos'
+
+
+class Check(AuditModel):
+    student = models.ForeignKey(
+        Student, verbose_name='Aluno', related_name='student_check')
+    plate = models.ForeignKey(
+        Plate, verbose_name='Prato', related_name='plate_check')
+    meal = models.ForeignKey(
+        Meal, verbose_name='Refeição', related_name='meal_check')
+
+    def __str__(self):
+        return '%s - %s' % (self.plate.name, self.student.get_full_name())
+
+    def get_absolute_url(self):
+        return reverse('student:check_list')

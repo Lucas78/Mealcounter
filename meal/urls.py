@@ -3,8 +3,12 @@ from . import views
 
 urlpatterns = [
     # Autocomplete
-    url(r'^item-meal-autocomplete/$', views.ItemMealAutocomplete.as_view(),
-        name='item_meal_autocomplete'),
+    url(r'^item-meal-autocomplete/$',
+        views.ItemMealAutocomplete.as_view(), name='item_meal_autocomplete'),
+    url(r'^plate-autocomplete/$',
+        views.PlateAutocomplete.as_view(), name='plate_autocomplete'),
+    url(r'^allergy-autocomplete/$',
+        views.AllergyAutocomplete.as_view(), name='allergy_autocomplete'),
     # Meal
     url(r'^meal/list/$', views.MealList.as_view(), name='meal_list'),
     url(r'^meal/add/$', views.MealCreate.as_view(), name='meal_add'),
@@ -34,4 +38,13 @@ urlpatterns = [
         views.PlateUpdate.as_view(), name='plate_edit'),
     url(r'^plate/(?P<pk>[0-9]+)/delete/$',
         views.PlateDelete.as_view(), name='plate_delete'),
+    # Allergy
+    url(r'^allergy/list/$', views.AllergyList.as_view(), name='allergy_list'),
+    url(r'^allergy/add/$', views.AllergyCreate.as_view(), name='allergy_add'),
+    url(r'^allergy/details/(?P<pk>[0-9]+)/$',
+        views.AllergyDetail.as_view(), name='allergy_details'),
+    url(r'^allergy/edit/(?P<pk>[0-9]+)/$',
+        views.AllergyUpdate.as_view(), name='allergy_edit'),
+    url(r'^allergy/(?P<pk>[0-9]+)/delete/$',
+        views.AllergyDelete.as_view(), name='allergy_delete'),
 ]

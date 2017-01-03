@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='itemmeal',
             name='properties',
-            field=models.CharField(default='', max_length=100, verbose_name='Propiedades'),
+            field=models.CharField(default='', max_length=100, verbose_name='Propriedades'),
         ),
         migrations.AlterField(
             model_name='itemmeal',

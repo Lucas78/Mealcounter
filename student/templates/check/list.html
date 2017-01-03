@@ -1,20 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block body %}
 
     <nav class="navbar navbar-default">
         <div class="container">
-            <a class="navbar-brand" href="#">Itens da Refeição</a>
-            <ul class="nav navbar-nav pull-right">
-                <li>
-                    <p class="navbar-btn">
-                        <a class="btn btn-default" href="{% url 'meal:item_meal_add' %}">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>
-                            Novo
-                        </a>
-                    </p>
-                </li>
-            </ul>
+            <a class="navbar-brand" href="#">Ocorrências</a>
         </div>
     </nav>
 
@@ -29,19 +19,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for itemmeal in object_list %}
+                        {% for check in object_list %}
                             <tr>
-                                <td>{{ itemmeal.name }}</td>
+                                <td>{{ check.meal.date }}</td>
                                 <td>
-                                    <a href="{% url 'meal:item_meal_details' itemmeal.id %}" class="btn btn-default" title="Exibir">
+                                    <a href="{% url 'student:check_details' check.id %}" class="btn btn-default" title="Exibir">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </a>
 
-                                    <a href="{% url 'meal:item_meal_edit' itemmeal.id %}" class="btn btn-default" title="Editar">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a>
-
-                                    <a href="#modal-id-{{ itemmeal.id }}" class="btn btn-default" title="Remover" data-toggle="modal">
+                                    <a href="#modal-id-{{ check.id }}" class="btn btn-default" title="Remover" data-toggle="modal">
                                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                                     </a>
                                 </td>
@@ -49,7 +35,7 @@
 
                             <!-- MODAL -->
                             <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-                                <div class="modal fade" id="modal-id-{{ itemmeal.id }}">
+                                <div class="modal fade" id="modal-id-{{ check.id }}">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -58,10 +44,10 @@
                                             </div>
                                             <div class="modal-body">
                                                 <p>Deseja realmente remover
-                                                    <strong>{{ itemmeal.name }}</strong>?</p>
+                                                    <strong>{{ check.name }}</strong>?</p>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{% url 'meal:item_meal_delete' itemmeal.pk %}" method="post">{%csrf_token%}
+                                                <form action="{% url 'student:check_delete' check.pk %}" method="post">{%csrf_token%}
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                                                     <button type="submit" class="btn btn-danger" title="Deletar">
                                                         Excluir

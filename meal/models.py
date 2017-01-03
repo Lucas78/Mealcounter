@@ -11,12 +11,29 @@ class AuditModel(models.Model):
         abstract = True
 
 
+class Allergy(AuditModel):
+    name = models.CharField('Descrição', max_length=100, default='')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('meal:allergy_list')
+
+    class Meta:
+        verbose_name = 'Alergia'
+        verbose_name_plural = 'Alergias'
+
+
 class ItemMeal(AuditModel):
     name = models.CharField('Nome', max_length=100, default='')
-    amount = models.IntegerField('Quantidade', default='')
-    value = models.DecimalField(
-        'Valor', max_digits=9, decimal_places=2, default='')
-    properties = models.CharField('Propriedades', max_length=100, default='')
+    properties = models.TextField(
+        'Propriedades', max_length=100, null=True, blank=True)
+    allergy = models.ManyToManyField(
+        Allergy,
+        verbose_name='Alergias',
+        related_name='allergy_item',
+        blank=True)
 
     def __str__(self):
         return self.name
@@ -32,7 +49,8 @@ class ItemMeal(AuditModel):
 
 class Plate(AuditModel):
     name = models.CharField('Descrição', max_length=100)
-    item_meal = models.ManyToManyField(ItemMeal)
+    item_meal = models.ManyToManyField(
+        ItemMeal, verbose_name='Itens da Refeição', related_name='item_plate')
 
     def __str__(self):
         return self.name
@@ -47,14 +65,13 @@ class Plate(AuditModel):
 
 
 class Meal(AuditModel):
-    meal_date = models.DateField('Data da Refeição')
-    name = models.CharField('Descrição', max_length=100)
+    date = models.DateField('Data')
     estimate = models.IntegerField('Estimativa')
-    start_time = models.TimeField('Inicio da Refeição')
-    end_time = models.TimeField('Fim da Refeição')
+    start_time = models.TimeField('Início')
+    end_time = models.TimeField('Término')
     status = models.BooleanField('Ativo')
-    plate = models.ForeignKey(
-        Plate, verbose_name='Prato', related_name='meals')
+    plate = models.ManyToManyField(
+        Plate, verbose_name='Prato', related_name='plate_meal')
 
     def __str__(self):
         return self.name

@@ -2,120 +2,133 @@
 
 {% block body %}
 
-<nav class="navbar navbar-default">
-	<div class="container">
-		<a class="navbar-brand" href="#">Refeições</a>
-		<ul class="nav navbar-nav pull-right">
-			<li>
-				<p class="navbar-btn">
-					<a class="btn btn-default" href="{% url 'meal:meal_add' %}"> 
-						<i class="fa fa-file-o" aria-hidden="true"></i>
-						Novo
-					</a>
-				</p>
-			</li>
-		</ul>
-	</div>
-</nav>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <a class="navbar-brand" href="#">Refeições</a>
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <p class="navbar-btn">
+                        <a class="btn btn-default" href="{% url 'meal:meal_add' %}">
+                            <i class="fa fa-file-o" aria-hidden="true"></i>
+                            Novo
+                        </a>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>Nome</th>
-						<th>Descrição</th>
-						<th style="width: 21%;">Ações</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for meal in object_list %}
-					<tr>
-						<td>{{ meal.name }}</td>
-						<td>{{ meal.meal_date }}</td>
-						<td>                    
-							<a href="{% url 'meal:meal_details' meal.id %}" class="btn btn-default" title="Exibir">
-								<i class="fa fa-search" aria-hidden="true"></i>
-							</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Início</th>
+                            <th>Término</th>
+                            <th style="width: 21%;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meal in object_list %}
+                            <tr>
+                                <td>{{ meal.date }}</td>
+                                <td>{{ meal.start_time }}</td>
+                                <td>{{ meal.end_time }}</td>
+                                <td>
+                                    <a href="{% url 'meal:meal_details' meal.id %}" class="btn btn-default" title="Exibir">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </a>
 
-							<a href="{% url 'meal:meal_edit' meal.id %}" class="btn btn-default" title="Editar">
-								<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-							</a>
+                                    <a href="{% url 'meal:meal_edit' meal.id %}" class="btn btn-default" title="Editar">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
 
-							<a href="#modal-id-{{ meal.id }}" class="btn btn-default" title="Remover" data-toggle="modal">
-								<i class="fa fa-trash-o" aria-hidden="true"></i>
-							</a>
-						</td>
-					</tr>
+                                    <a href="#modal-id-{{ meal.id }}" class="btn btn-default" title="Remover" data-toggle="modal">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
 
-					<!-- MODAL -->
-					<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-						<div class="modal fade" id="modal-id-{{ meal.id }}">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-										<h4 class="modal-title">Alerta!</h4>
-									</div>
-									<div class="modal-body">
-										<p>Deseja realmente remover <strong>{{ meal.name }}</strong>?</p>
-									</div>
-									<div class="modal-footer">
-										<form action="{% url 'meal:meal_delete' meal.pk %}" method="post">{%csrf_token%}
-											<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-											<button type="submit" class='btn btn-danger' title='Deletar'>
-												Excluir
-											</button>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /MODAL -->
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<center>
-		<!-- Paginação -->
-		{% if page_obj.has_other_pages %}
-		<nav>
-			<ul class="pagination">
-				{% if page_obj.has_previous %}
-				<li>
-					<a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
-					</a>
-				</li>
-				{% else %}
-				<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-				{% endif %}
-				{% for page_num in page_obj.paginator.page_range %}
-				<li {% if page_num == patients.number %} class="active" {% endif %}>
-					<a href="?page={{ page_num }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}">{{ page_num }}</a>
-				</li>
-				{% endfor %}
-				{% if page_obj.has_next %}
-				<li>
-					<a href="?page={{ page_obj.next_page_number}}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-					</a>
-				</li>
-				{% else %}
-				<li class="disabled">
-					<a href="#" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-					</a>
-				</li>
-				{% endif %}
-			</ul>
-		</nav>
-		{% endif %}
-		<!-- Fim da Paginação -->
-	</center>
-</div>
+                            <!-- MODAL -->
+                            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                                <div class="modal fade" id="modal-id-{{ meal.id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title">Alerta!</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Deseja realmente remover
+                                                    <strong>{{ meal.name }}</strong>?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form action="{% url 'meal:meal_delete' meal.pk %}" method="post">{%csrf_token%}
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-danger" title="Deletar">
+                                                        Excluir
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /MODAL -->
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <center>
+            <!-- Paginação -->
+            {% if page_obj.has_other_pages %}
+                <nav>
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li>
+                                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for page_num in page_obj.paginator.page_range %}
+                            {% if page_num == patients.number %}
+                                <li class="active">
+                                    <a href="?page={{ page_num }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="?page={{ page_num }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}">{{ page_num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li>
+                                <a href="?page={{ page_obj.next_page_number}}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+            <!-- Fim da Paginação -->
+        </center>
+    </div>
 
 {% endblock %}
