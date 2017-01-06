@@ -1,15 +1,12 @@
-{% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block body %}
+{% extends 'base.html' %} {% load widget_tweaks %} {% block body %}
 <nav class="navbar navbar-default">
 	<div class="container">
 		<a class="navbar-brand" href="#">Cadastro/Alteração dos Itens da Refeição</a>
 		<ul class="nav navbar-nav pull-right">
 			<li>
 				<p class="navbar-btn">
-					<a class="btn btn-default" href="{% url 'meal:item_meal_list' %}">
-						<i class="fa fa-times" aria-hidden="true"></i>
-						Cancelar
+					<a class="btn btn-default" href="{% url 'meal:meal_student_list' %}">
+						<i class="fa fa-times" aria-hidden="true"></i> Cancelar
 					</a>
 				</p>
 			</li>
@@ -19,35 +16,86 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			<form action="." class="form-group" method="post">{% csrf_token %}
-				<fieldset>
-					{% for field in form %}
-					{% if field.errors %}
-					<div class="form-group error" >
-						<label class="control-label" >{{ field.label }}</label>
-						{{ field|add_class:"form-control input-md" }}
-						{% for error in field.errors%}
-						<span class="help-inline error">{{ error}}</span>
-						{% endfor%}
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p>
+				<strong>Date:</strong> {{ meal.date }}
+			</p>
+			<p>
+				<strong>Início:</strong> {{ meal.start_time }}
+			</p>
+			<p>
+				<strong>Término:</strong> {{ meal.end_time }}
+			</p>
+			<hr />
+			<h4>Opções</h4>
+			{% if error %}
+			<span class="text-danger">{{ error }}</span> {% endif %}
+			<form action="." class="form-group" method="post">{% csrf_token %} {% for plate in meal.plate.all %}
+				<table class="table table-hover">
+					<tr>
+						<td>
+							<label>
+									{% if check and plate.pk == check.plate.pk %}
+									<input type="radio" name="plate" value="{{ plate.pk }}" checked>
+									{% else %}
+									<input type="radio" name="plate" value="{{ plate.pk }}">
+									{% endif %}
+								</label>
+						</td>
+						{% if plate in dangerous_plates %}
+						<td class="text-danger">* {{ plate.name }}<br>(Contém alimentos que você é alérgico, para mais detalhes clique <a href="#modal-id-{{ plate.id }}" data-toggle="modal">
+							aqui
+						</a>)</td>
+						{% else %}
+						<td>{{ plate.name }}</td>
+						{% endif %}
+						<td>
+							<a href="#modal-id-{{ plate.id }}" class="btn btn-default" title="Detalhes" data-toggle="modal">
+								<i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>
+							</a>
+						</td>
+					</tr>
+				</table>
+				<!-- MODAL -->
+				<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+					<div class="modal fade" id="modal-id-{{ plate.id }}">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title">Prato</h4>
+								</div>
+								<div class="modal-body">
+									<p>
+										<strong>Nome:</strong> {{ plate.name }}
+									</p>
+									<hr />
+									<h5>Alimentos</h5>
+									<ul>
+										{% for item in plate.item_meal.all %} {% if item in dangerous_items %}
+										<li class="text-danger">{{ item.name }} (Você é alérgico.)</li>
+										{% else %}
+										<li>{{ item.name }}</li>
+										{% endif %} {% endfor %}
+									</ul>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+								</div>
+							</div>
+						</div>
 					</div>
-					{%else%}
-					<div class="form-group">
-						<label class="control-label" >{{ field.label }}</label>
-						{{ field|add_class:"form-control input-md" }}
-					</div>
-					{%endif%}
-					{% endfor %}
-					<div class="form-group">
-						<button type="submit" value="Salvar" class="btn btn-primary">
+				</div>
+				<!-- /MODAL -->
+				{% endfor %}
+				<div class="form-group">
+					<button type="submit" value="Salvar" class="btn btn-primary">
 							<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 							Salvar
 						</button>
-					</div>
-				</fieldset>
+				</div>
 			</form>
 		</div>
 	</div>
 </div>
-{{ form.media }}
-{% endblock %}
+{{ form.media }} {% endblock %}

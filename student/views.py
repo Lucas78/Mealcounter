@@ -1,11 +1,14 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.http import Http404, HttpResponseRedirect, HttpResponseNotFound
+from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
-from .models import Student, Check
-from .forms import StudentForm, CheckForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from meal.models import Meal, Plate, ItemMeal
+from .models import Student, Check
+from .forms import StudentForm, CheckForm
 
 
 @method_decorator(login_required, name='dispatch')
@@ -55,20 +58,64 @@ class CheckList(ListView):
     template_name = 'check/list.html'
 
 
-@method_decorator(login_required, name='dispatch')
-class CheckCreate(CreateView):
+@login_required
+def check_list(request, pk):
+    try:
+        student = Student.objects.get(pk=pk)
+        pks = list(*student.allergy.values_list('pk'))
+        dangerous_items = ItemMeal.objects.filter(
+            allergy__in=pks)
+        dangerous_plates = []
+        if dangerous_items:
+            pks = list(*dangerous_items.values_list('pk'))
+            dangerous_plates = Plate.objects.filter(item_meal__in=pks)
+    except:
+        raise Http404('Estudante não existe')
 
-    model = Check
-    template_name = 'check/add.html'
-    form_class = CheckForm
+    if request.method == 'GET':
+        checks = Check.objects.filter(student=student)
+        context = {
+            'object_list': checks,
+            'student': student,
+            'dangerous_items': dangerous_items,
+            'dangerous_plates': dangerous_plates
+        }
+        return render(
+            request, 'check/admin/list.html', context)
+    return HttpResponseNotFound("Página não encontrada")
 
 
-@method_decorator(login_required, name='dispatch')
-class CheckUpdate(UpdateView):
+@login_required
+def check_in(request, pk):
+    error = ''
+    try:
+        student = Student.objects.get(user_ptr=request.user)
+        meal = Meal.objects.get(pk=pk)
+    except:
+        raise Http404('Refeição não existe')
 
-    model = Check
-    template_name = 'check/add.html'
-    form_class = CheckForm
+    try:
+        check = Check.objects.get(meal=meal, student=student)
+    except:
+        check = None
+
+    if request.method == 'POST':
+        if 'plate' in request.POST and request.POST['plate']:
+            plate = Plate.objects.get(pk=request.POST['plate'])
+            if check:
+                check.plate = plate
+            else:
+                check = Check(student=student, meal=meal, plate=plate)
+            check.save()
+            return HttpResponseRedirect('/meal/student/list/')
+        else:
+            error = 'Por favor, selecione um prato.'
+    context = {
+        'meal': meal,
+        'check': check,
+        'error': error
+    }
+    return render(request, 'check/add.html', context)
 
 
 @method_decorator(login_required, name='dispatch')

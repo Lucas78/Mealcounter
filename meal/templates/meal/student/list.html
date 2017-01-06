@@ -1,0 +1,141 @@
+{% extends 'base.html' %} {% block body %}
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <a class="navbar-brand" href="#">Refeições</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Início</th>
+                        <th>Término</th>
+                        <th style="width: 21%;">Check-In</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for meal in object_list %}
+                    <tr>
+                        <td>{{ meal.date }} {% if meal.date == now.date %}
+                            <strong>(Hoje)</strong>{% endif %}
+                        </td>
+                        <td>{{ meal.start_time }}</td>
+                        <td>{{ meal.end_time }}</td>
+                        <td>
+                            {% if meal.date == now.date %}
+                            <a href="{% url 'student:check_add' meal.pk %}" class="btn btn-default" title="Check-In">
+                                <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i>
+                            </a>
+                            {% else %}
+                            <a href="#modal-id-{{ meal.id }}" class="btn btn-default" title="Detalhes" data-toggle="modal">
+                                <i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <!-- MODAL -->
+                    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                        <div class="modal fade" id="modal-id-{{ meal.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Refeição</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <strong>Data:</strong> {{ meal.date }}
+                                        </p>
+                                        <p>
+                                            <strong>Inicio:</strong> {{ meal.start_time }}
+                                        </p>
+                                        <p>
+                                            <strong>Termino:</strong> {{ meal.end_time }}
+                                        </p>
+                                        <hr />
+                                        <h5>Pratos</h5>
+                                        <ul>
+                                            <li>
+                                            {% for plate in meal.plate.all %} {% if plate in dangerous_plates %}
+                                            <span class="text-danger">{{ plate.name }}</span>
+                                            {% else %}
+                                            {{ plate.name }}
+                                            {% endif %}
+                                            <ul>
+                                                {% for item in plate.item_meal.all %}
+                                                {% if item in dangerous_items %}
+                                                <li class="text-danger">{{ item.name }} (Você é alérgico)</li>
+                                                {% else %}
+                                                <li>{{ item.name }}</li>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /MODAL -->
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <center>
+        <!-- Paginação -->
+        {% if page_obj.has_other_pages %}
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="disabled">
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %} {% for page_num in page_obj.paginator.page_range %} {% if page_num == patients.number %}
+                <li class="active">
+                    <a href="?page={{ page_num }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}">{{ page_num }}</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="?page={{ page_num }}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}">{{ page_num }}</a>
+                </li>
+                {% endif %} {% endfor %} {% if page_obj.has_next %}
+                <li>
+                    <a href="?page={{ page_obj.next_page_number}}{% if request.GET.search_box %}&search_box={{ request.GET.search_box }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="disabled">
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        <!-- Fim da Paginação -->
+    </center>
+</div>
+
+{% endblock %}

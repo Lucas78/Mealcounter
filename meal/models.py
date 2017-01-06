@@ -74,7 +74,7 @@ class Meal(AuditModel):
         Plate, verbose_name='Prato', related_name='plate_meal')
 
     def __str__(self):
-        return self.name
+        return str(self.date)
 
     def get_absolute_url(self):
         return reverse('meal:meal_list')

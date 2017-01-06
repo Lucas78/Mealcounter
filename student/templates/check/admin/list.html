@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% block body %}
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <a class="navbar-brand" href="#">Check-In - {{ student.get_full_name }}</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Refeição</th>
+                        <th>Prato</th>
+                        <th style="width: 21%;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for check in object_list %}
+                    <tr>
+                        <td>{{ check.meal.date }}</td>
+                        {% if check.plate in dangerous_plates %}
+                        <td class="text-danger">
+                            {{ check.plate.name }}
+                        </td>
+                        {% else %}
+                        <td>
+                            {{ check.plate.name }}
+                        </td>
+                        {% endif %}
+                        <td>
+                            <a href="#modal-id-{{ check.id }}" class="btn btn-default" title="Detalhes" data-toggle="modal">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- MODAL -->
+                    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                        <div class="modal fade" id="modal-id-{{ check.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Refeição</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <strong>Data:</strong> {{ check.meal.date }}
+                                        </p>
+                                        <p>
+                                            <strong>Inicio:</strong> {{ check.meal.start_time }}
+                                        </p>
+                                        <p>
+                                            <strong>Termino:</strong> {{ check.meal.end_time }}
+                                        </p>
+                                        <hr />
+                                        <h4>Prato - {{ check.plate.name }}</h4>
+                                        <hr />
+                                        <ul>
+                                            {% for item in check.plate.item_meal.all %} {% if item in dangerous_items %}
+                                            <li class="text-danger">{{ item.name }} (Alérgico)</li>
+                                            {% else %}
+                                            <li>{{ item.name }}</li>
+                                            {% endif %} {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /MODAL -->
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

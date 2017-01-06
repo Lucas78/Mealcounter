@@ -25,6 +25,7 @@
                     <thead>
                         <tr>
                             <th>Nome</th>
+                            <th>Check-In</th>
                             <th style="width: 21%;">Ações</th>
                         </tr>
                     </thead>
@@ -32,6 +33,11 @@
                         {% for student in object_list %}
                             <tr>
                                 <td>{{ student.get_full_name }}</td>
+                                <td>
+                                    <a href="{% url 'student:check_admin_list' student.pk %}" class="btn btn-link">
+                                        <i class="fa fa-list"></i> Visualizar
+                                    </a>
+                                </td>
                                 <td>
                                     <a href="{% url 'student:student_details' student.id %}" class="btn btn-default" title="Exibir">
                                         <i class="fa fa-search" aria-hidden="true"></i>

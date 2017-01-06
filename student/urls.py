@@ -17,12 +17,12 @@ urlpatterns = [
     # Check
     url(r'^check/list/$',
         views.CheckList.as_view(), name='check_list'),
-    url(r'^check/add/$',
-        views.CheckCreate.as_view(), name='check_add'),
+    url(r'^check/list/(?P<pk>[0-9]+)/$',
+        views.check_list, name='check_admin_list'),
+    url(r'^check/add/(?P<pk>[0-9]+)/$',
+        views.check_in, name='check_add'),
     url(r'^check/details/(?P<pk>[0-9]+)/$',
         views.CheckDetail.as_view(), name='check_details'),
-    url(r'^check/edit/(?P<pk>[0-9]+)/$',
-        views.CheckUpdate.as_view(), name='check_edit'),
     url(r'^check/(?P<pk>[0-9]+)/delete/$',
         views.CheckDelete.as_view(), name='check_delete'),
 ]

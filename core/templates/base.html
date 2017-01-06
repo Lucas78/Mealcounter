@@ -45,6 +45,8 @@
 				</ul>
 				{% if user.is_authenticated and user.is_superuser  %}
 					{% include "navbar_admin.html" %}
+				{% elif student %}
+					{% include "navbar_student.html" %}
 				{% else %}
 					{% include "navbar_default.html" %}
 				{% endif %}
@@ -61,7 +63,7 @@
 			        {% for message in messages %}
 			        <div class="alert alert-info">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						<strong>Atenção</strong> 
+						<strong>Atenção</strong>
 			        	<p>{{ message }}</p>
 					</div>
 			        {% endfor %}

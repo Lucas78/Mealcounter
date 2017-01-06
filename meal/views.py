@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
+from django.utils import timezone
 from dal import autocomplete
 from .models import Meal, ItemMeal, Plate, Allergy
 from .forms import MealForm, ItemMealForm, PlateForm, AllergyForm
@@ -14,6 +15,18 @@ class MealList(ListView):
     paginate_by = 50
     model = Meal
     template_name = 'meal/list.html'
+
+
+@method_decorator(login_required, name='dispatch')
+class MealStudentList(ListView):
+    paginate_by = 50
+    model = Meal
+    template_name = 'meal/student/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MealStudentList, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
 
 
 @method_decorator(login_required, name='dispatch')

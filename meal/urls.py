@@ -11,6 +11,8 @@ urlpatterns = [
         views.AllergyAutocomplete.as_view(), name='allergy_autocomplete'),
     # Meal
     url(r'^meal/list/$', views.MealList.as_view(), name='meal_list'),
+    url(r'^meal/student/list/$',
+        views.MealStudentList.as_view(), name='meal_student_list'),
     url(r'^meal/add/$', views.MealCreate.as_view(), name='meal_add'),
     url(r'^meal/details/(?P<pk>[0-9]+)/$',
         views.MealDetail.as_view(), name='meal_details'),
