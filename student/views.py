@@ -62,15 +62,16 @@ class CheckList(ListView):
 def check_list(request, pk):
     try:
         student = Student.objects.get(pk=pk)
-        pks = list(*student.allergy.values_list('pk'))
-        dangerous_items = ItemMeal.objects.filter(
-            allergy__in=pks)
-        dangerous_plates = []
-        if dangerous_items:
-            pks = list(*dangerous_items.values_list('pk'))
-            dangerous_plates = Plate.objects.filter(item_meal__in=pks)
     except:
         raise Http404('Estudante não existe')
+
+    pks = list(*student.allergy.values_list('pk'))
+    dangerous_items = ItemMeal.objects.filter(
+        allergy__in=pks)
+    dangerous_plates = []
+    if dangerous_items:
+        pks = list(*dangerous_items.values_list('pk'))
+        dangerous_plates = Plate.objects.filter(item_meal__in=pks)
 
     if request.method == 'GET':
         checks = Check.objects.filter(student=student)

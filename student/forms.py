@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from django.contrib.auth.models import User
 from dal import autocomplete
 from .models import Student, Check
 
@@ -21,6 +22,12 @@ class StudentForm(forms.ModelForm):
         ]
         widgets = {'allergy': autocomplete.ModelSelect2Multiple(
             url='meal:allergy_autocomplete')}
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if User.objects.filter(email=data):
+            raise forms.ValidationError("E-mail já registrado!")
+        return data
 
 
 class CheckForm(forms.ModelForm):
