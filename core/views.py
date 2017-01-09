@@ -8,7 +8,7 @@ from student.models import Student
 
 
 def index(request):
-    if ('user' in request and
+    if (request.user.is_authenticated() and
             Student.objects.filter(user_ptr=request.user).exists()):
         return HttpResponseRedirect('/meal/student/list/')
 
