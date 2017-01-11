@@ -11,20 +11,7 @@ class EditAccountForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name')
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-
-        # Valido o email para ser obrigatório
-        if email == '':
-            raise forms.ValidationError('O endereço de email é obrigatório.')
-
-        if email and User.objects.filter(email=email).exists():
-            raise forms.ValidationError(
-                'Este endereço de email já está em uso. Por favor, use um ' +
-                'email diferente.')
-        return email
+        fields = ('username', 'first_name', 'last_name')
 
 
 class PasswordResetForm(PasswordResetForm):

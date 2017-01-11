@@ -29,6 +29,22 @@ class StudentForm(forms.ModelForm):
             raise forms.ValidationError("E-mail já registrado!")
         return data
 
+class StudentUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(label='Nome')
+    last_name = forms.CharField(label='Sobrenome')
+
+    class Meta:
+        model = Student
+        fields = [
+            'registration', 'first_name', 'last_name', 'nickname',
+            'cpf', 'rg', 'gender', 'father_name', 'father_occupation',
+            'mother_name', 'mother_occupation', 'phone', 'birth',
+            'postal_code', 'city', 'address', 'address_number', 'district',
+            'reference', 'photo', 'allergy'
+        ]
+        widgets = {'allergy': autocomplete.ModelSelect2Multiple(
+            url='meal:allergy_autocomplete')}
+
 
 class CheckForm(forms.ModelForm):
 

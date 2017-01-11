@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from meal.models import Meal, Plate, ItemMeal
 from .models import Student, Check
-from .forms import StudentForm, CheckForm
+from .forms import StudentForm, StudentUpdateForm, CheckForm
 
 
 @method_decorator(login_required, name='dispatch')
@@ -32,7 +32,7 @@ class StudentUpdate(UpdateView):
 
     model = Student
     template_name = 'student/add.html'
-    form_class = StudentForm
+    form_class = StudentUpdateForm
 
 
 @method_decorator(login_required, name='dispatch')
@@ -65,13 +65,12 @@ def check_list(request, pk):
     except:
         raise Http404('Estudante não existe')
 
-    pks = list(*student.allergy.values_list('pk'))
     dangerous_items = ItemMeal.objects.filter(
-        allergy__in=pks)
+        allergy__in=student.allergy.values_list('pk'))
     dangerous_plates = []
     if dangerous_items:
-        pks = list(*dangerous_items.values_list('pk'))
-        dangerous_plates = Plate.objects.filter(item_meal__in=pks)
+        dangerous_plates = Plate.objects.filter(
+            item_meal__in=dangerous_items.values_list('pk'))
 
     if request.method == 'GET':
         checks = Check.objects.filter(student=student)

@@ -105,7 +105,11 @@
                 </p>
                 <p>
                     <strong>Foto:</strong>
+                    {% if object.photo %}
                     <img class="photo-detail img-responsive img-rounded" src="{{ object.photo.url }}" alt="Foto" />
+                    {% else %}
+                    Não há foto registrada
+                    {% endif %}
                 </p>
                 <hr>
                 <table class="table table-hover">
