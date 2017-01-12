@@ -76,7 +76,7 @@ def check_list(request, pk):
         checks = Check.objects.filter(student=student)
         context = {
             'object_list': checks,
-            'student': student,
+            'aluno': student,
             'dangerous_items': dangerous_items,
             'dangerous_plates': dangerous_plates
         }

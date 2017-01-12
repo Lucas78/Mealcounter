@@ -6,13 +6,12 @@ def student(request):
     context = {}
     try:
         student = Student.objects.get(user_ptr=request.user)
-        pks = list(*student.allergy.values_list('pk'))
         dangerous_items = ItemMeal.objects.filter(
-            allergy__in=pks)
+            allergy__in=student.allergy.values_list('pk'))
         dangerous_plates = []
         if dangerous_items:
-            pks = list(*dangerous_items.values_list('pk'))
-            dangerous_plates = Plate.objects.filter(item_meal__in=pks)
+            dangerous_plates = Plate.objects.filter(
+                item_meal__in=dangerous_items.values_list('pk'))
 
         context['student'] = student
         context['dangerous_items'] = dangerous_items

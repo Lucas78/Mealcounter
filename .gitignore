@@ -1,5 +1,4 @@
 *.pyc
 *.pyo
 *.json
-mealcounter/settings_local.py
 media/
